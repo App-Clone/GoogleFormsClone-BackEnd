@@ -8,6 +8,10 @@ const { OAuth2Client } = require("google-auth-library");
 
 const Form = require("./models/forms.model");
 
+const responses = require('./responses/responses.js');
+
+const router = express.Router();
+
 mongoose
   .connect(process.env.MONGODB)
   .then(() => {
@@ -24,6 +28,8 @@ const app = express({ json: "50mb" });
 
 app.use(express.json());
 app.use(cors());
+
+app.use('/responses', responses);
 
 app.get("/", (req, res) => {
   res.send("Hello World");
@@ -74,18 +80,6 @@ app.post("/forms", (req, res) => {
       res.send({ id: id });
     }
   });
-});
-
-app.post("/responses", (req, res) => {
-  //    const [quesnum, paraanswer, valueselected, type] = req.body;
-  //    const response = {quesnum: quesnum, paraanswer: paraanswer, valueselected: valueselected, type: type};
-  var obj = {};
-  req.body.forEach((item, idx) => {
-    obj[idx] = item;
-  });
-  console.log(obj);
-  console.log(req.body);
-  res.send({ status: "200" });
 });
 
 app.listen(4000, () => {
